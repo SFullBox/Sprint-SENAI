@@ -12,40 +12,29 @@ import java.util.List;
 public class ExercicioService {
 
     @Autowired
-    ExercicioRepository exercicioRepository;
+    private ExercicioRepository exercicioRepository;
 
-    public ExercicioDTO criar(ExercicioDTO exercicioDTO){
+    public ExercicioDTO criar(ExercicioDTO dto) {
         Exercicio exercicio = new Exercicio();
-
-        exercicio.setNome(exercicioDTO.getNome()); // setá com o que vem do DTO
-        exercicio.setImagem(exercicioDTO.getImagem()); // setá com o que vem do DTO
-        exercicio.setSeries(exercicioDTO.getSeries()); // setá com o que vem do DTO
-        exercicio.setRepeticoes(exercicioDTO.getRepeticoes()); // setá com o que vem do DTO
-
-        exercicio = exercicioRepository.save(exercicio); // pega tudo que foi salvo nele e mete no banco
-
-        return new ExercicioDTO(exercicio); // só pra retornar no postman
-
+        exercicio.setNome(dto.getNome());
+        exercicio.setImagem(dto.getImagem());
+        exercicio.setSeries(dto.getSeries());
+        exercicio.setRepeticoes(dto.getRepeticoes());
+        return new ExercicioDTO(exercicioRepository.save(exercicio));
     }
-    public ExercicioDTO salvar(Long id, ExercicioDTO exercicioDTO){
+
+    public ExercicioDTO salvar(Long id, ExercicioDTO dto) {
         Exercicio exercicio = exercicioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Exercício não encontrado"));
-
-        // Atualiza os dados existentes
-        exercicio.setNome(exercicioDTO.getNome());
-        exercicio.setImagem(exercicioDTO.getImagem());
-        exercicio.setSeries(exercicioDTO.getSeries());
-        exercicio.setRepeticoes(exercicioDTO.getRepeticoes());
-
-        // Salva as atualizações
-        exercicio = exercicioRepository.save(exercicio);
-
-        return new ExercicioDTO(exercicio);
+        exercicio.setNome(dto.getNome());
+        exercicio.setImagem(dto.getImagem());
+        exercicio.setSeries(dto.getSeries());
+        exercicio.setRepeticoes(dto.getRepeticoes());
+        return new ExercicioDTO(exercicioRepository.save(exercicio));
     }
 
-    public List<Exercicio> listarTodos(){
-        List<Exercicio> exercicios;
-        return exercicios = exercicioRepository.findAll();
+    public List<Exercicio> listarTodos() {
+        return exercicioRepository.findAll();
     }
 
     public ExercicioDTO listar(Long id) {
@@ -54,14 +43,10 @@ public class ExercicioService {
         return new ExercicioDTO(exercicio);
     }
 
-
-
     public void excluir(Long id) {
-        Exercicio exercicio = exercicioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Exercício não encontrado"));
-
+        if (!exercicioRepository.existsById(id)) {
+            throw new RuntimeException("Exercício não encontrado");
+        }
         exercicioRepository.deleteById(id);
     }
-
-
 }

@@ -10,7 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter @Setter
 public class ExercicioDTO {
-
     private Long id;
     private String nome;
     private String imagem;
@@ -18,8 +17,12 @@ public class ExercicioDTO {
     private Integer repeticoes;
 
     public ExercicioDTO(Exercicio exercicio) {
-
+        if (exercicio != null) {
+            this.id = exercicio.getId();
+            this.nome = exercicio.getNome();
+            this.imagem = exercicio.getImagem();
+            this.series = exercicio.getSeries();
+            this.repeticoes = exercicio.getRepeticoes();
+        }
     }
-
-
 }

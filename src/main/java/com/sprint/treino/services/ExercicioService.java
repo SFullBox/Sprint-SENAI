@@ -43,14 +43,25 @@ public class ExercicioService {
         return new ExercicioDTO(exercicio);
     }
 
-
-
-
-    public List<Exercicio> listar(){
-        List<Exercicio> exercicios = exercicioRepository.findAll();
-        return exercicios;
+    public List<Exercicio> listarTodos(){
+        List<Exercicio> exercicios;
+        return exercicios = exercicioRepository.findAll();
     }
 
+    public ExercicioDTO listar(Long id) {
+        Exercicio exercicio = exercicioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Exercício não encontrado com ID: " + id));
+        return new ExercicioDTO(exercicio);
+    }
+
+
+
+    public void excluir(Long id) {
+        Exercicio exercicio = exercicioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Exercício não encontrado"));
+
+        exercicioRepository.deleteById(id);
+    }
 
 
 }
